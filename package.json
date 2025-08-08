@@ -1,0 +1,22 @@
+{
+  "name": "pamoja-chat",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "npm@10",
+  "workspaces": [
+    "apps/*",
+    "server/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace apps/web run dev",
+    "dev:auth": "npm --workspace server/auth run dev",
+    "dev:chat": "npm --workspace server/chat run dev",
+    "dev:message": "npm --workspace server/message run dev",
+    "dev:all": "concurrently \"npm run dev:auth\" \"npm run dev:chat\" \"npm run dev:message\"",
+    "typecheck": "npm -ws --if-present run typecheck || exit 0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
