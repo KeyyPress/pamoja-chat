@@ -5,7 +5,8 @@ import { Kafka } from "kafkajs";
 import { KAFKA_TOPICS } from "../../../packages/shared/src/kafka";
 import { WebSocketServer } from "ws";
 import type { WebSocket } from "ws";
-import { getDb } from "./db";
+import { connectMongoose } from "./mongoose";
+import { ReceiptModel } from "./models";
 
 dotenv.config();
 const app = express();
@@ -59,14 +60,12 @@ async function runConsumer() {
           } catch {}
         }
         try {
-          const db = await getDb();
-          await db
-            .collection("receipts")
-            .updateOne(
-              { messageId: payload.id, userId: recipientId },
-              { $set: { deliveredAt: new Date() } },
-              { upsert: true }
-            );
+          await connectMongoose();
+          await ReceiptModel.updateOne(
+            { messageId: payload.id, userId: recipientId },
+            { $set: { deliveredAt: new Date() } },
+            { upsert: true }
+          );
         } catch {}
       }
     },
