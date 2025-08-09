@@ -3,7 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { Kafka } from "kafkajs";
 import { KAFKA_TOPICS } from "../../../packages/shared/src/kafka";
-import { getDb } from "./db";
+import { connectMongoose } from "./mongoose";
+import { MessageModel } from "./models";
 import { EncryptedMessageSchema } from "./validation";
 
 dotenv.config();
@@ -27,11 +28,14 @@ app.get("/health", (_req, res) => res.json({ status: "ok", service: "chat" }));
 app.post("/messages", async (req, res) => {
   const message = req.body; // already encrypted payload
   const parsed = EncryptedMessageSchema.safeParse(message);
-  if (!parsed.success) return res.status(400).json({ error: "invalid payload", issues: parsed.error.issues });
+  if (!parsed.success)
+    return res
+      .status(400)
+      .json({ error: "invalid payload", issues: parsed.error.issues });
 
   try {
-    const db = await getDb();
-    await db.collection("messages").insertOne({ ...message, createdAt: new Date() });
+    await connectMongoose();
+    await MessageModel.create({ ...message });
   } catch (e) {
     console.error("mongo insert failed", e);
   }
