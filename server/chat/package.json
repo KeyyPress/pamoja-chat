@@ -1,5 +1,5 @@
 {
-  "name": "@pamoja/chat",
+  "name": "@zip/chat",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "typecheck": "tsc -p . --noEmit"
   },
   "dependencies": {
-    "@pamoja/shared": "file:../../packages/shared",
+    "@zip/shared": "file:../../packages/shared",
     "@types/uuid": "^10.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

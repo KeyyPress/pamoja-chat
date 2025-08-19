@@ -1,5 +1,4 @@
-import { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import type { ReactNode } from "react";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -13,7 +12,7 @@ export const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex items-center justify-center gap-2 text-[var(--color-primary)]">
           <div className="w-3 h-3 rounded-full bg-[var(--color-accent)]" />
-          <h1 className="text-3xl font-bold">Pamoja Chat</h1>
+          <h1 className="text-3xl font-bold">Zip Chat</h1>
         </div>
         <h2 className="mt-6 text-center text-2xl font-semibold text-[var(--color-text)]">
           {title}

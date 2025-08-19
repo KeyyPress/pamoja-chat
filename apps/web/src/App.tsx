@@ -4,6 +4,7 @@ import { RegisterPage } from "./pages/auth/RegisterPage";
 import { ForgotPasswordPage } from "./pages/auth/ForgotPasswordPage";
 import { ResetPasswordPage } from "./pages/auth/ResetPasswordPage";
 import { TermsPage } from "./pages/TermsPage";
+import LandingPage from "./pages/LandingPage";
 
 // Temporary auth check - replace with real auth context later
 const isAuthenticated = false;
@@ -16,6 +17,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public */}
+        <Route path="/" element={<LandingPage />} />
+
         {/* Auth Routes */}
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/auth/register" element={<RegisterPage />} />
@@ -25,7 +29,7 @@ const App = () => {
 
         {/* Protected Routes */}
         <Route
-          path="/"
+          path="/app"
           element={
             <PrivateRoute>
               <div className="min-h-screen bg-[var(--color-background)]">

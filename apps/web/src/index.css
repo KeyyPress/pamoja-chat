@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 :root {
+  font-family: "Jost", system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+    Arial, "Apple Color Emoji", "Segoe UI Emoji";
   /* Tech Trust Palette */
   --color-primary: #1a237e; /* Deep Indigo */
   --color-secondary: #2196f3; /* Electric Blue */

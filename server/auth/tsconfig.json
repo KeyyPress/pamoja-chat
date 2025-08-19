@@ -12,8 +12,8 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@pamoja/shared": ["../../packages/shared/src/index.ts"],
-      "@pamoja/shared/*": ["../../packages/shared/src/*"]
+          "@zip/shared": ["../../packages/shared/src/index.ts"],
+    "@zip/shared/*": ["../../packages/shared/src/*"]
     }
   },
   "include": ["src"]
