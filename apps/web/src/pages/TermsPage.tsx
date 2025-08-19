@@ -11,7 +11,7 @@ export const TermsPage = () => {
             className="inline-flex items-center gap-2 text-[var(--color-primary)]"
           >
             <div className="w-3 h-3 rounded-full bg-[var(--color-accent)]" />
-            <h1 className="text-3xl font-bold">Pamoja Chat</h1>
+            <h1 className="text-3xl font-bold">Zip Chat</h1>
           </Link>
         </div>
 
@@ -21,7 +21,7 @@ export const TermsPage = () => {
           <div className="prose prose-slate max-w-none">
             <h3 className="text-lg font-medium mb-4">1. Introduction</h3>
             <p className="mb-4">
-              Welcome to Pamoja Chat. By using our service, you agree to these
+              Welcome to Zip Chat. By using our service, you agree to these
               terms. Please read them carefully.
             </p>
 
@@ -36,8 +36,7 @@ export const TermsPage = () => {
 
             <h3 className="text-lg font-medium mb-4">3. User Conduct</h3>
             <p className="mb-4">
-              You agree to use Pamoja Chat for lawful purposes only. You will
-              not:
+              You agree to use Zip Chat for lawful purposes only. You will not:
             </p>
             <ul className="list-disc pl-5 mb-4">
               <li>Harass, abuse, or harm others</li>
@@ -59,7 +58,7 @@ export const TermsPage = () => {
               5. Intellectual Property
             </h3>
             <p className="mb-4">
-              Pamoja Chat is open source software. You may use, modify, and
+              Zip Chat is open source software. You may use, modify, and
               distribute it according to our license, while respecting all
               applicable copyright and trademark laws.
             </p>
@@ -67,7 +66,7 @@ export const TermsPage = () => {
             <h3 className="text-lg font-medium mb-4">6. Changes to Terms</h3>
             <p className="mb-4">
               We may update these terms from time to time. We will notify you of
-              any significant changes. Continued use of Pamoja Chat constitutes
+              any significant changes. Continued use of Zip Chat constitutes
               acceptance of updated terms.
             </p>
           </div>
