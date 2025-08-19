@@ -1,8 +1,8 @@
-pamojaChat
+Zip Chat
 
 Overview
 
-pamojaChat is an open source one-to-one and group chat application. It uses a TypeScript monorepo with a React frontend and Express-based microservices on the backend. Messages are end-to-end encrypted on the client. Kafka handles real-time fanout and MongoDB stores users, chats, and message history.
+Zip Chat is an open source one-to-one and group chat application. It uses a TypeScript monorepo with a React frontend and Express-based microservices on the backend. Messages are end-to-end encrypted on the client. Kafka handles real-time fanout and MongoDB stores users, chats, and message history.
 
 Tech stack
 
@@ -47,7 +47,7 @@ Environment variables
 
 Backend services expect:
 
-- MONGO_URI (e.g., mongodb://localhost:27017/pamoja or a MongoDB Atlas SRV URI)
+- MONGO_URI (e.g., mongodb://localhost:27017/zip or a MongoDB Atlas SRV URI)
 - KAFKA_BROKERS (defaults to localhost:29092 for local dev)
 - AUTH_JWT_SECRET (auth service)
 
@@ -128,6 +128,6 @@ Deployment (Render example)
 
 Open source
 
-pamojaChat is an open source project. Contributions are welcome. See CONTRIBUTION.md for guidelines. A LICENSE file can be added to formalize licensing (e.g., MIT).
+Zip Chat is an open source project. Contributions are welcome. See CONTRIBUTION.md for guidelines. A LICENSE file can be added to formalize licensing (e.g., MIT).
 
-# pamoja-chat
+# zip-chat
