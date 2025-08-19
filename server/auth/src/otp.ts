@@ -24,7 +24,7 @@ export async function issueOtp(phone: string) {
       await twilio.messages.create({
         to: phone,
         from,
-        body: `Your pamojaChat code is ${code}`,
+        body: `Your Zip Chat code is ${code}`,
       });
     } catch {}
   }
