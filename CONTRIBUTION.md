@@ -1,6 +1,6 @@
-Contributing to pamojaChat
+Contributing to Zip Chat
 
-Thank you for your interest in contributing. This document outlines how to propose changes and help improve pamojaChat.
+Thank you for your interest in contributing. This document outlines how to propose changes and help improve Zip Chat.
 
 Code of conduct
 
