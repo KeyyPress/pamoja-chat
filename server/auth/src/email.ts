@@ -26,15 +26,14 @@ function createTransport() {
 }
 
 const transporter = createTransport();
-const fromAddress =
-  process.env.SMTP_FROM || "Pamoja Chat <no-reply@pamoja.local>";
+const fromAddress = process.env.SMTP_FROM || "Zip Chat <no-reply@zip.local>";
 
 export async function sendWelcomeEmail(toEmail: string, displayName: string) {
   await transporter.sendMail({
     from: fromAddress,
     to: toEmail,
-    subject: "Welcome to pamojaChat",
-    text: `Hi ${displayName},\n\nWelcome to pamojaChat. Your account has been created successfully.`,
+    subject: "Welcome to Zip Chat",
+    text: `Hi ${displayName},\n\nWelcome to Zip Chat. Your account has been created successfully.`,
   });
 }
 
