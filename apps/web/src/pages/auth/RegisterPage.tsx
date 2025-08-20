@@ -7,12 +7,10 @@ import PhoneInputComponent from "../../components/PhoneInput";
 
 export const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+  const [username, setUsername] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,47 +19,36 @@ export const RegisterPage = () => {
     setTimeout(() => setIsLoading(false), 1000);
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
   return (
-    <AuthLayout
-      title="Create your account"
-      subtitle="Already have an account? Sign in instead"
-    >
+    <AuthLayout title="Join ZipChat now!">
       <form onSubmit={handleSubmit} className="space-y-6">
+        <PhoneInputComponent setPhoneNumber={setPhoneNumber} />
         <Input
-          label="Full name"
+          label="Username"
           type="text"
-          autoComplete="name"
+          autoComplete="username"
+          placeholder="@"
           required
-          value={formData.fullName}
-          onChange={(e) => handleInputChange("fullName", e.target.value)}
-        />
-
-        <Input
-          label="Email address"
-          type="email"
-          autoComplete="email"
-          required
-          value={formData.email}
-          onChange={(e) => handleInputChange("email", e.target.value)}
-        />
-
-        <PhoneInputComponent
-          phoneNumber={formData.phone}
-          setPhoneNumber={(value) => handleInputChange("phone", value)}
-          editPhone={true}
+          value={username}
+          onChange={(e) => setUsername(() => e.target.value)}
         />
 
         <Input
           label="Password"
           type="password"
+          placeholder="•"
           autoComplete="new-password"
           required
-          value={formData.password}
-          onChange={(e) => handleInputChange("password", e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(() => e.target.value)}
+        />
+        <Input
+          label="Re-type Password"
+          type="password"
+          autoComplete="new-password"
+          required
+          value={password2}
+          onChange={(e) => setPassword2(() => e.target.value)}
         />
 
         <div className="flex items-center">
@@ -84,29 +71,18 @@ export const RegisterPage = () => {
         </div>
 
         <div className="space-y-4">
-          <Button type="submit" fullWidth isLoading={isLoading}>
+          <Button
+            disabled={
+              !phoneNumber ||
+              !(password === password2) ||
+              !(password.length > 3)
+            }
+            type="submit"
+            fullWidth
+            isLoading={isLoading}
+          >
             Create account
           </Button>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-gray-500">
-                Or continue with
-              </span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" fullWidth>
-              Google
-            </Button>
-            <Button variant="outline" fullWidth>
-              GitHub
-            </Button>
-          </div>
         </div>
 
         <div className="text-center text-sm">
