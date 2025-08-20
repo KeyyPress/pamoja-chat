@@ -1,72 +1,155 @@
 import {
-  parsePhoneNumber,
-  isValidPhoneNumber,
-  isPossiblePhoneNumber,
   getCountryCallingCode,
   getExampleNumber,
+  isValidPhoneNumber,
   getCountries,
-  isSupportedCountry,
-  PhoneNumber,
   type CountryCode,
-  type Examples,
 } from "libphonenumber-js/min";
-import { useState } from "react";
-import metadata from "libphonenumber-js/metadata.full";
+import examples from "libphonenumber-js/mobile/examples";
+import { useEffect, useRef, useState } from "react";
 
 const PhoneInputComponent = ({
-  onCountryChange,
-  phoneNumber,
   setPhoneNumber,
-  editPhone,
 }: {
-  onCountryChange: (country: string) => void;
-  phoneNumber: string;
   setPhoneNumber: (value: string) => void;
-  editPhone: boolean;
 }) => {
-  const countries = getCountries();
-  const [selectedCountry, setSelectedCountry] = useState<CountryCode>("RW");
+  const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
+  const countries = getCountries()
+    .map((el) => ({ code: el, name: regionNames.of(el) }))
+    .sort((a, b) => (a?.name || "").localeCompare(b?.name || ""));
 
-  console.log(countries);
+  const [selectedCountry, setSelectedCountry] = useState<CountryCode>("RW");
+  const [phoneExample, setPhoneExample] = useState("720123456");
+  const [countryCode, setCountryCode] = useState("250");
+  const [phoneNumberIsValid, setPhoneNumberIsValid] = useState<null | boolean>(
+    null
+  );
+  const [localPhoneNumber, setLocalPhoneNumber] = useState<string[]>(
+    new Array(phoneExample.length).fill("")
+  );
+
+  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+  useEffect(() => {
+    inputRefs.current[0]?.focus();
+  }, []);
+
+  useEffect(() => {
+    const example =
+      getExampleNumber(selectedCountry, examples)?.nationalNumber || "";
+    const code =
+      getExampleNumber(selectedCountry, examples)?.countryCallingCode || "";
+    setPhoneExample(example);
+    setCountryCode(code);
+    setLocalPhoneNumber(new Array(example.length).fill(""));
+    inputRefs.current = new Array(example.length).fill(null);
+  }, [selectedCountry]);
+
+  // Handle single input change
+  const handleChange = (index: number, value: string) => {
+    if (!/^\d*$/.test(value)) return; // only numbers
+
+    const updated = localPhoneNumber.map((el, i) => (i === index ? value : el));
+    setLocalPhoneNumber(updated);
+
+    // focus next input
+    if (value && index < inputRefs.current.length - 1)
+      inputRefs.current[index + 1]?.focus();
+
+    const fullNumber = countryCode + updated.join("");
+    const valid =
+      isValidPhoneNumber(fullNumber, selectedCountry) &&
+      updated.every((el) => el != "");
+
+    setPhoneNumberIsValid(valid);
+
+    if (valid) {
+      setPhoneNumber(fullNumber);
+    } else {
+      setPhoneNumber("");
+    }
+  };
+
+  // Handle backspace
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Backspace" && !localPhoneNumber[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  // Handle paste event
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("Text").replace(/\D/g, ""); // only digits
+    if (!pastedData) return;
+
+    const newArray = new Array(localPhoneNumber.length).fill("");
+    for (let i = 0; i < newArray.length && i < pastedData.length; i++) {
+      newArray[i] = pastedData[i];
+    }
+    setLocalPhoneNumber(newArray);
+    setPhoneNumber(newArray.join(""));
+
+    // focus the last filled input or the last input
+    const focusIndex = Math.min(
+      pastedData.length,
+      inputRefs.current.length - 1
+    );
+    inputRefs.current[focusIndex]?.focus();
+  };
 
   return (
-    <div>
-      <div>Phone Number</div>
-      <div className="grid grid-cols-2">
-        <select
-          name="phone-code"
-          value={selectedCountry}
-          onChange={(e) => setSelectedCountry(e.target.value as CountryCode)}
-          className="col-span-1 bg-white"
-        >
-          {countries.map((country) => {
-            return <option value={country}>{country}</option>;
-          })}
-        </select>
-        <div className="flex col-span-1 gap-2">
-          <div className="flex gap-2 flex-wrap">
-            {new Array(metadata.countries[selectedCountry]?.length)
-              .fill(0)
-              .map((_, index) => (
-                <input
-                  key={index}
-                  //   ref={(el) => {
-                  //     inputRefs.current[index] = el;
-                  //   }}
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  maxLength={1}
-                  value={phoneNumber}
-                  //   onChange={(e) => handleDigitChange(index, e.target.value)}
-                  //   onKeyDown={(e) => handleKeyDown(index, e)}
-                  //   onPaste={handlePaste}
-                  disabled={!editPhone}
-                  className="w-12 h-12 text-center text-lg font-semibold border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed"
-                  placeholder="0"
-                />
-              ))}
-          </div>
+    <div className="w-full p-1">
+      <div className="font-semibold mb-2">Phone Number</div>
+      <select
+        name="phone-code"
+        value={selectedCountry}
+        onChange={(e) => setSelectedCountry(e.target.value as CountryCode)}
+        className="bg-white w-full md:w-40 border p-2 border-gray-300 rounded mb-2"
+      >
+        {countries.map((country) => (
+          <option key={country.code} value={country.code}>
+            {country.name} +{getCountryCallingCode(country.code)}
+          </option>
+        ))}
+      </select>
+
+      <div className="flex gap-[0.5px]">
+        {/* Country code */}
+        <div className="flex gap-[0.5px] items-center">
+          {[...countryCode].map((el, index) => (
+            <input
+              key={index}
+              type="text"
+              readOnly
+              value={el}
+              className="w-7 h-9 md:w-10 md:h-12 text-center text-sm md:text-lg font-semibold border rounded border-gray-300 bg-gray-100"
+            />
+          ))}
+        </div>
+
+        {/* Phone number inputs */}
+        <div className="flex gap-[0.5px] ">
+          {phoneExample.split("").map((el, index) => (
+            <input
+              key={index}
+              ref={(ref) => (inputRefs.current[index] = ref)}
+              type="text"
+              inputMode="numeric"
+              pattern="\d*"
+              maxLength={1}
+              value={localPhoneNumber[index] || ""}
+              onChange={(e) => handleChange(index, e.target.value)}
+              onKeyDown={(e) => handleKeyDown(index, e)}
+              onPaste={handlePaste}
+              placeholder={localPhoneNumber.filter(Boolean).length ? "" : el}
+              className={`w-7 h-9 ${
+                phoneNumberIsValid === false ? "border-2 border-red-300" : ""
+              } md:w-10 md:h-12 text-center text-sm md:text-lg font-semibold border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition`}
+            />
+          ))}
         </div>
       </div>
     </div>
