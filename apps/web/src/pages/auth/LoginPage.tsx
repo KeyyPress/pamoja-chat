@@ -3,9 +3,27 @@ import { Link } from "react-router-dom";
 import { AuthLayout } from "../../components/AuthLayout";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
+import PhoneInputComponent from "../../components/PhoneInput";
+import metadata from "libphonenumber-js/metadata.full";
+
+import {
+  parsePhoneNumber,
+  isValidPhoneNumber,
+  isPossiblePhoneNumber,
+  getCountryCallingCode,
+  getCountries,
+  isSupportedCountry,
+  PhoneNumber,
+} from "libphonenumber-js/min";
 
 export const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    phone: "",
+    password: "",
+  });
+
+  console.log(metadata.countries.RW?.length);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,17 +32,18 @@ export const LoginPage = () => {
     setTimeout(() => setIsLoading(false), 1000);
   };
 
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+
   return (
-    <AuthLayout
-      title="Welcome back"
-      subtitle="Don't have an account yet? Sign up for free"
-    >
+    <AuthLayout title="Login | Zip Chat" subtitle="">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Input
-          label="Email address"
-          type="email"
-          autoComplete="email"
-          required
+        <PhoneInputComponent
+          phoneNumber={formData.phone}
+          setPhoneNumber={(value) => handleInputChange("phone", value)}
+          editPhone={true}
         />
 
         <Input
@@ -32,6 +51,8 @@ export const LoginPage = () => {
           type="password"
           autoComplete="current-password"
           required
+          value={formData.password}
+          onChange={(e) => handleInputChange("password", e.target.value)}
         />
 
         <div className="flex items-center justify-between">
@@ -53,7 +74,7 @@ export const LoginPage = () => {
           <div className="text-sm">
             <Link
               to="/auth/forgot-password"
-              className="font-medium text-[var(--color-primary)] hover:text-[var(--color-primary)]/90"
+              className="font-medium text-green-500 hover:text-green-600"
             >
               Forgot your password?
             </Link>
@@ -89,7 +110,7 @@ export const LoginPage = () => {
         <div className="text-center text-sm">
           <Link
             to="/auth/register"
-            className="font-medium text-[var(--color-primary)] hover:text-[var(--color-primary)]/90"
+            className="font-medium text-green-500 hover:text-green-600"
           >
             Create an account
           </Link>

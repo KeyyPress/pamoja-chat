@@ -3,9 +3,16 @@ import { Link } from "react-router-dom";
 import { AuthLayout } from "../../components/AuthLayout";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
+import PhoneInputComponent from "../../components/PhoneInput";
 
 export const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,19 +21,38 @@ export const RegisterPage = () => {
     setTimeout(() => setIsLoading(false), 1000);
   };
 
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
   return (
     <AuthLayout
       title="Create your account"
       subtitle="Already have an account? Sign in instead"
     >
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Input label="Full name" type="text" autoComplete="name" required />
+        <Input
+          label="Full name"
+          type="text"
+          autoComplete="name"
+          required
+          value={formData.fullName}
+          onChange={(e) => handleInputChange("fullName", e.target.value)}
+        />
 
         <Input
           label="Email address"
           type="email"
           autoComplete="email"
           required
+          value={formData.email}
+          onChange={(e) => handleInputChange("email", e.target.value)}
+        />
+
+        <PhoneInputComponent
+          phoneNumber={formData.phone}
+          setPhoneNumber={(value) => handleInputChange("phone", value)}
+          editPhone={true}
         />
 
         <Input
@@ -34,6 +60,8 @@ export const RegisterPage = () => {
           type="password"
           autoComplete="new-password"
           required
+          value={formData.password}
+          onChange={(e) => handleInputChange("password", e.target.value)}
         />
 
         <div className="flex items-center">
@@ -42,13 +70,13 @@ export const RegisterPage = () => {
             name="terms"
             type="checkbox"
             required
-            className="h-4 w-4 rounded border-gray-300 text-[var(--color-primary)]"
+            className="h-4 w-4 rounded border-gray-300 text-green-500"
           />
-          <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
+          <label htmlFor="terms" className="ml-2 block text-sm text-green-900">
             I agree to the{" "}
             <Link
               to="/terms"
-              className="font-medium text-[var(--color-primary)] hover:text-[var(--color-primary)]/90"
+              className="font-medium text-green-500 hover:text-green-600"
             >
               Terms and Conditions
             </Link>
@@ -84,7 +112,7 @@ export const RegisterPage = () => {
         <div className="text-center text-sm">
           <Link
             to="/auth/login"
-            className="font-medium text-[var(--color-primary)] hover:text-[var(--color-primary)]/90"
+            className="font-medium text-green-500 hover:text-green-600"
           >
             Already have an account? Sign in
           </Link>
